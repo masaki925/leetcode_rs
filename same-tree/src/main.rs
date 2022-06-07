@@ -24,25 +24,16 @@ use std::cell::RefCell;
 struct Solution {}
 
 impl Solution {
-    pub fn traverse(root: Option<Rc<RefCell<TreeNode>>>, stack: &mut Vec<i32>) {
-        match root {
-            Some(node) => {
-                Self::traverse(node.borrow().left.clone(), stack);
-                Self::traverse(node.borrow().right.clone(), stack);
-                stack.push(node.borrow().val);
-            },
-            _ => {
-                stack.push(-1);
-            }
-        }
-    }
-
     pub fn is_same_tree(p: Option<Rc<RefCell<TreeNode>>>, q: Option<Rc<RefCell<TreeNode>>>) -> bool {
-        let mut stack_p: Vec<i32> = vec![];
-        let mut stack_q: Vec<i32> = vec![];
-        Self::traverse(p, &mut stack_p);
-        Self::traverse(q, &mut stack_q);
-        stack_p == stack_q
+        match (p, q) {
+            (None, None) => true,
+            (Some(np), Some(nq)) => {
+                np.borrow().val == nq.borrow().val
+                    && Self::is_same_tree(np.borrow().left.clone(), nq.borrow().left.clone())
+                    && Self::is_same_tree(np.borrow().right.clone(), nq.borrow().right.clone())
+            },
+            _ => false
+        }
     }
 }
 
