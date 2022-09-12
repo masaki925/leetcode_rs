@@ -8,30 +8,21 @@ impl Solution {
         let mut rl = 0;
         let mut rr = rows - 1;
 
-        let mut row = -1;
-
-        while rl <= rr {
+        while rl <= rr && rr < rows {
             let rmid = (rl + rr) / 2;
 
-            if target == matrix[rmid][0] {
-                row = rmid as i32;
-                break;
+            if target > matrix[rmid][cols-1] {
+                rl = rmid + 1;
             } else if target < matrix[rmid][0] {
                 rr = rmid - 1;
-                if rr >= 0 && target >= matrix[rr][0] {
-                    row = rr as i32;
-                    break;
-                }
-            } else if target > matrix[rmid][0] {
-                if target <= matrix[rmid][cols-1] {
-                    row = rmid as i32;
-                    break;
-                }
-                rl = rmid + 1;
+            } else {
+                break
             }
         }
 
-        if row == -1 { return false }
+        if !(rl <= rr) { return false }
+
+        let row = (rl + rr) / 2;
 
         let mut cl = 0;
         let mut cr = cols - 1;
@@ -59,7 +50,7 @@ fn main() {
         vec![23,30,34,60],
     ];
 
-    let target = 13;
+    let target = 3;
     let res = Solution::search_matrix(matrix, target);
     println!("{}", res);
 }
